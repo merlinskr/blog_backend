@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
+
 class TimeStampedModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="created_time")  # 记录创建时间
     updated_at = models.DateTimeField(auto_now=True, verbose_name="updated_time")      # 记录更新时间

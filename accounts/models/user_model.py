@@ -1,10 +1,9 @@
 from django.db import models
 from .base_model import TimeStampedModel, SoftDeletableModel
-from django.contrib.auth.hashers import make_password, check_password
-from django.contrib.auth.models import BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, username, email, password=None, **extra_fields):
+    def create_user(self, username, email=None, password=None, **extra_fields):
         if not email:
             raise ValueError("The Email field must be set")
         email = self.normalize_email(email)
@@ -14,31 +13,31 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)  
         return user
 
-    def create_superuser(self, username, email, password=None, **extra_fields):
+    def create_superuser(self, username, email=None, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)  
         extra_fields.setdefault("is_superuser", True)
+        
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True.")
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True.")
         
         return self.create_user(username, email, password, **extra_fields) 
 
 
-class User(TimeStampedModel, SoftDeletableModel):
-    username = models.CharField(max_length=255,unique=True)
-    password = models.CharField(max_length=255)
-    email = models.EmailField(max_length=255,unique=True)
+class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel, SoftDeletableModel):
+    username = models.CharField(max_length=255, unique=True)
+    email = models.EmailField(max_length=255, unique=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)  
-    is_superuser = models.BooleanField(default=False)  
     
     objects = CustomUserManager() 
     
-    USERNAME_FIELD = 'email'  
-    REQUIRED_FIELDS = ['username'] 
+    USERNAME_FIELD = 'username'  
+    REQUIRED_FIELDS = ['email'] 
     
-    def set_password(self, raw_password):
-        self.password = make_password(raw_password)
-    
-    def check_password(self, raw_password):
-        return check_password(raw_password, self.password)
+    def __str__(self):
+        return self.username
         
     class Meta:
         ordering = ["-created_at"]
