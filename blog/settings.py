@@ -30,10 +30,10 @@ ALLOWED_HOSTS = ["*"]
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=1),  # access token 1 天过期
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),     # refresh token 有效 7 天
-    "ROTATE_REFRESH_TOKENS": True,                   # 每次刷新后发新 refresh token
-    "BLACKLIST_AFTER_ROTATION": True,                # 旧的 refresh token 作废
-    "AUTH_HEADER_TYPES": ("Bearer",),                # 请求头加 Bearer: xxx
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),  # refresh token 有效 7 天
+    "ROTATE_REFRESH_TOKENS": True,  # 每次刷新后发新 refresh token
+    "BLACKLIST_AFTER_ROTATION": True,  # 旧的 refresh token 作废
+    "AUTH_HEADER_TYPES": ("Bearer",),  # 请求头加 Bearer: xxx
 }
 
 # Application definition
@@ -45,27 +45,28 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "rest_framework",        # Django REST框架核心包，提供API开发功能
-    "drf_spectacular",       # 自动生成API文档和Swagger界面
-    "corsheaders",           # CORS中间件，解决跨域问题
-    "accounts",              # 你的用户账户应用
+    "rest_framework",  # Django REST框架核心包，提供API开发功能
+    "drf_spectacular",  # 自动生成API文档和Swagger界面
+    "corsheaders",  # CORS中间件，解决跨域问题
+    "accounts",  # 你的用户账户应用
+    "article",  # 文章管理应用
 ]
 
 REST_FRAMEWORK = {
-    # 'EXCEPTION_HANDLER': 'blog.exceptions.custom_exception_handler', 
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    # 'EXCEPTION_HANDLER': 'blog.exceptions.custom_exception_handler',
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",  # 使用Spectacular自动生成API文档
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",  # 启用分页功能
-    "PAGE_SIZE": 20,                                            # 每页显示20条记录
+    "PAGE_SIZE": 20,  # 每页显示20条记录
 }
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Blog API",                    # API文档标题
+    "TITLE": "Blog API",  # API文档标题
     "DESCRIPTION": "A blog application API",  # API描述
-    "VERSION": "1.0.0",                     # API版本号
-    "SERVE_INCLUDE_SCHEMA": False,          # 不在文档中包含原始schema
+    "VERSION": "1.0.0",  # API版本号
+    "SERVE_INCLUDE_SCHEMA": False,  # 不在文档中包含原始schema
 }
 
 MIDDLEWARE = [
@@ -156,7 +157,7 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # 自定义用户模型
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = "accounts.User"
 
 # CORS配置
 # 允许所有源进行跨域请求（开发环境）
