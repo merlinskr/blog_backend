@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from accounts.models.base_model import TimeStampedModel, SoftDeletableModel
 
 
@@ -27,7 +28,9 @@ class Tag(TimeStampedModel, SoftDeletableModel):
 class Article(TimeStampedModel, SoftDeletableModel):
     title = models.CharField(max_length=255)
     content = models.TextField()
-    author = models.ForeignKey("auth.User", on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="articles"
+    )
     tags = models.ManyToManyField(Tag, related_name="articles")
     views = models.PositiveIntegerField(default=0)
     likes = models.PositiveIntegerField(default=0)

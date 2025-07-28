@@ -5,8 +5,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from drf_spectacular.utils import extend_schema
 
 from accounts.serializer.user_serializer import UpdateUserSerializer
-from ..serializer import UserSerializer
-from ..models import User
+from accounts.serializer import UserSerializer
+from accounts.models import User
 
 
 class CreateUserView(APIView):
