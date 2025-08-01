@@ -48,9 +48,10 @@ INSTALLED_APPS = [
     "rest_framework",  # Django REST框架核心包，提供API开发功能
     "drf_spectacular",  # 自动生成API文档和Swagger界面
     "corsheaders",  # CORS中间件，解决跨域问题
+    "storages",  # 用于文件存储的第三方库
     "accounts",  # 你的用户账户应用
     "article",  # 文章管理应用
-    "storages",  # 用于文件存储的第三方库
+    "file_manager",  # 文件管理应用
 ]
 
 REST_FRAMEWORK = {
@@ -138,6 +139,27 @@ AWS_S3_OBJECT_PARAMETERS = {
 
 # 配置媒体文件的 URL 前缀
 MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/"
+
+# 文件上传限制
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB
+
+# 允许的文件类型
+ALLOWED_FILE_TYPES = {
+    "image": ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"],
+    "document": ["application/pdf", "application/msword", "text/plain"],
+    "video": ["video/mp4", "video/webm"],
+    "audio": ["audio/mp3", "audio/wav", "audio/ogg"],
+}
+
+# 最大文件大小限制（按分类）
+MAX_FILE_SIZE = {
+    "image": 5 * 1024 * 1024,  # 5MB
+    "document": 10 * 1024 * 1024,  # 10MB
+    "video": 100 * 1024 * 1024,  # 100MB
+    "audio": 20 * 1024 * 1024,  # 20MB
+    "other": 5 * 1024 * 1024,  # 5MB
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
