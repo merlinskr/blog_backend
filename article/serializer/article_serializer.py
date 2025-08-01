@@ -5,7 +5,7 @@ from ..models import Article, Tag
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ["id", "name", "slug", "description", "color", "is_active"]
+        fields = ["id", "name", "description", "color", "is_active"]
 
     def create(self, validated_data):
         return Tag.objects.create(**validated_data)

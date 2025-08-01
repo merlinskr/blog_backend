@@ -11,10 +11,9 @@ class ArticleStatus(models.TextChoices):
 
 class Tag(TimeStampedModel, SoftDeletableModel):
     name = models.CharField(max_length=50)
-    slug = models.SlugField(max_length=100, unique=True)
     description = models.TextField(blank=True, null=True)
-    color = models.CharField(max_length=7, default="#cccccc")
-    is_active = models.BooleanField(default=True)
+    color = models.CharField(max_length=7)
+    is_active = models.BooleanField()
 
     class Meta:
         ordering = ["-created_at"]

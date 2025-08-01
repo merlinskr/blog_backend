@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "corsheaders",  # CORS中间件，解决跨域问题
     "accounts",  # 你的用户账户应用
     "article",  # 文章管理应用
+    "storages",  # 用于文件存储的第三方库
 ]
 
 REST_FRAMEWORK = {
@@ -114,6 +115,29 @@ DATABASES = {
     }
 }
 
+# File storage
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
+# MinIO 配置信息（保留这些，某些地方可能会用到）
+AWS_ACCESS_KEY_ID = "yulon-user"
+AWS_SECRET_ACCESS_KEY = "f5fXnzk5F4X7KqVUVju3E29vu7gL2615"
+AWS_STORAGE_BUCKET_NAME = "yulon-blog"
+AWS_S3_ENDPOINT_URL = "http://118.178.237.131:9000"
+AWS_S3_REGION_NAME = "cn"
+AWS_S3_SIGNATURE_VERSION = "s3v4"
+AWS_S3_OBJECT_PARAMETERS = {
+    "CacheControl": "max-age=86400",
+}
+
+# 配置媒体文件的 URL 前缀
+MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
