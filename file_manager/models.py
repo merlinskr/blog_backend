@@ -14,17 +14,11 @@ class FileCategory(models.TextChoices):
 
 
 class UploadedFile(TimeStampedModel, SoftDeletableModel):
-    """文件管理模型"""
-
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-
-    # 文件基本信息
     original_name = models.CharField(max_length=255, verbose_name="原始文件名")
     file_name = models.CharField(max_length=255, verbose_name="存储文件名")
     file_path = models.CharField(max_length=500, verbose_name="文件路径")
-    file_url = models.URLField(verbose_name="文件访问URL")
-
-    # 文件属性
+    file_url = models.URLField(verbose_name="文件访问URL", max_length=1000)
     file_size = models.BigIntegerField(verbose_name="文件大小(字节)")
     file_type = models.CharField(max_length=100, verbose_name="文件类型")
     category = models.CharField(
@@ -33,13 +27,9 @@ class UploadedFile(TimeStampedModel, SoftDeletableModel):
         default=FileCategory.OTHER,
         verbose_name="文件分类",
     )
-
-    # 文件元数据
     width = models.PositiveIntegerField(null=True, blank=True, verbose_name="图片宽度")
     height = models.PositiveIntegerField(null=True, blank=True, verbose_name="图片高度")
     duration = models.FloatField(null=True, blank=True, verbose_name="音视频时长")
-
-    # 上传者信息
     uploaded_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -57,9 +47,11 @@ class UploadedFile(TimeStampedModel, SoftDeletableModel):
 
     # 关联信息
     related_model = models.CharField(
-        max_length=100, blank=True, verbose_name="关联模型"
+        max_length=100, blank=True, verbose_name="关联模型", null=True
     )
-    related_id = models.CharField(max_length=100, blank=True, verbose_name="关联ID")
+    related_id = models.CharField(
+        max_length=100, blank=True, verbose_name="关联ID", null=True
+    )
 
     @property
     def vite_compatible_url(self):

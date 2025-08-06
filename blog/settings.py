@@ -56,6 +56,9 @@ INSTALLED_APPS = [
 
 REST_FRAMEWORK = {
     # 'EXCEPTION_HANDLER': 'blog.exceptions.custom_exception_handler',
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",  # 默认所有API视图需要认证
+    ],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),

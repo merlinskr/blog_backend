@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import UploadedFile, FileAccessLog
+from .models import UploadedFile, FileAccessLog, FileCategory
 
 
 class UploadedFileSerializer(serializers.ModelSerializer):
@@ -54,9 +54,7 @@ class FileUploadSerializer(serializers.Serializer):
     """文件上传序列化器"""
 
     file = serializers.FileField()
-    category = serializers.ChoiceField(
-        choices=UploadedFile.FileCategory.choices, required=False
-    )
+    category = serializers.ChoiceField(choices=FileCategory.choices, required=False)
     is_public = serializers.BooleanField(default=True)
     related_model = serializers.CharField(max_length=100, required=False)
     related_id = serializers.CharField(max_length=100, required=False)
