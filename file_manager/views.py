@@ -74,3 +74,45 @@ class FileUploadView(APIView):
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class FileListView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name="category",
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.QUERY,
+                description="文件分类过滤",
+            ),
+            OpenApiParameter(
+                name="is_public",
+                type=OpenApiTypes.BOOL,
+                location=OpenApiParameter.QUERY,
+                description="是否公开",
+            ),
+        ],
+        responses={200: UploadedFileSerializer(many=True)},
+        description="获取用户上传的文件列表",
+        tags=["文件管理"],
+    )
+    def get(self, request):
+        category = request.query_params.get("category")
+        is_public = request.query_params.get("is_public")
+
+        if is_public is not None:
+            is_public = is_public.lower() in ["true", "1"]
+
+        files = FileManagerService.get_user_files(
+            user=request.user,
+            category=category,
+            is_public=is_public,
+        )
+
+        files = files.select_related("uploaded_by")
+
+        serializer = UploadedFileSerializer(files, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
